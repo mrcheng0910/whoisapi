@@ -1,21 +1,19 @@
-#encoding:utf-8
-def quicksort(array):
-	
-	less= []
-	greater =[]
-	if len(array)<=1:
-		return array
-	privot = array.pop()
-	for x in array:
-		if x<=privot:
-			less.append(x)
-		else:
-			greater.append(x)
-	return quicksort(less)+[privot]+quicksort(greater)
-	
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/mrcheng.db'
+db = SQLAlchemy(app)
 
 
-if __name__ == "__main__":
-	array = [3,5,1,1,3,7,8,4,32,2]
-	print quicksort(array)
-	
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True)
+    email = db.Column(db.String(120), unique=True)
+
+    def __init__(self, username, email):
+        self.username = username
+        self.email = email
+
+    def __repr__(self):
+        return '<User %r>' % self.username
